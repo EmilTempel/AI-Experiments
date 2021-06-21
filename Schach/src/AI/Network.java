@@ -39,17 +39,11 @@ public class Network {
 			}
 		}
 		random = new Random();
-		fillRandom(-1, 1);
+		fillRandom();
 	}
 
 	public Network(Network n) {
-		this.sizes = n.sizes.clone();
-
-		neuron = new double[sizes.length][];
-		bias = new double[sizes.length][];
-		z = new double[sizes.length][];
-		derivat = new double[sizes.length][];
-		weight = new double[sizes.length][][];
+		this(n.sizes.clone());
 
 		for (int i = 0; i < sizes.length; i++) {
 			neuron[i] = new double[sizes[i]];
@@ -123,7 +117,7 @@ public class Network {
 		}
 	}
 
-	public void fillRandom(double min, double max) {
+	public void fillRandom() {
 		for (int i = 1; i < sizes.length; i++) {
 
 			for (int j = 0; j < sizes[i]; j++) {

@@ -12,7 +12,7 @@ import spiel.er.Rando;
 public class Brett {
 
 	Figur[][] feld;
-	
+
 	ArrayList<Spielzug>[] alle_züge = (ArrayList<Spielzug>[]) new ArrayList[2];
 
 	public Brett() {
@@ -83,13 +83,13 @@ public class Brett {
 
 	public ArrayList<Spielzug> giballeZüge(Farbe farbe) {
 		int f = farbe.ordinal();
-		if(alle_züge[f] == null) {
+		if (alle_züge[f] == null) {
 			alle_züge[f] = alleZüge(farbe);
 		}
-		
+
 		return alle_züge[f];
 	}
-	
+
 	private ArrayList<Spielzug> alleZüge(Farbe farbe) {
 		ArrayList<Spielzug> alle_züge = new ArrayList<Spielzug>();
 
@@ -123,9 +123,11 @@ public class Brett {
 					if (isSchlag(zug)) {
 						break;
 					}
-				} else {
+				}
+				if(isBreak(zug)) {
 					break;
 				}
+				
 			}
 
 		}
@@ -181,26 +183,26 @@ public class Brett {
 
 		return züge;
 	}
-	
+
 	public int score(Farbe farbe) {
-		int score = 0; 
-		for(int i = 0; i < 8; i++) {
-			for(int j = 0; j < 8; j++) {
+		int score = 0;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				Figur f = feld[i][j];
-				if(f != null && f.farbe == farbe) {
+				if (f != null && f.farbe == farbe) {
 					score += f.art.wert;
 				}
 			}
-			
+
 		}
 		return score;
 	}
-	
+
 	public int AnzahlZüge(Farbe farbe, Art art) {
 		ArrayList<Spielzug> alle_züge = giballeZüge(farbe);
 		int erg = 0;
-		for(int i = 0; i < alle_züge.size(); i++) {
-			if(FigurAt(alle_züge.get(i).x,alle_züge.get(i).y).art == art) {
+		for (int i = 0; i < alle_züge.size(); i++) {
+			if (FigurAt(alle_züge.get(i).x, alle_züge.get(i).y).art == art) {
 				erg++;
 			}
 		}
@@ -229,11 +231,11 @@ public class Brett {
 		}
 		if (bool) {
 			if (with_schach) {
-				
+
 				Brett b = new Brett(this);
 				b.ziehe(zug);
 				boolean schach = b.isSchach(f.farbe);
-				
+
 				return !schach;
 			} else {
 				return true;
@@ -257,21 +259,20 @@ public class Brett {
 		}
 
 	}
-	
+
 	public boolean isBreak(Spielzug zug) {
 		int x = zug.getFinalx();
 		int y = zug.getFinaly();
-		
-		
-		if(y >= 0 && y < 8 && x >= 0 && x < 8 && feld[y][x] != null) {
+
+		if (y >= 0 && y < 8 && x >= 0 && x < 8 && feld[y][x] != null) {
 			return !isSchlag(zug);
 		}
-		
+
 		return false;
 	}
 
 	public boolean isSchach(Farbe farbe) {
-		
+
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (feld[i][j] != null && feld[i][j].art == Art.KOENIG && feld[i][j].farbe == farbe)
@@ -295,9 +296,24 @@ public class Brett {
 			}
 
 		}
-		
 
 		return false;
+	}
+	
+	public double isOver(Farbe f) {
+		for(int i = 0; i < 2; i++) {
+			giballeZüge(Farbe.values()[i]);
+			
+			if(alle_züge[i].size() == 0) {
+				if(isSchach(Farbe.values()[i])) {
+					return f == Farbe.WEISS ? i : 1-i;
+				}else {
+					return 0.5;
+				}
+				
+			}
+		}
+		return -1;
 	}
 
 	public boolean isRemis() {
@@ -363,15 +379,15 @@ public class Brett {
 		feld[y][x].moved = true;
 
 		convert(x, y);
-		
+
 		alle_züge = (ArrayList<Spielzug>[]) new ArrayList[2];
 		return this;
 	}
 
 	public double[] asArray() {
 		double[] arr = new double[64];
-		for (int i = 0; i < 8 ; i ++) {
-			for (int j = 0; j < 8; j ++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if (feld[i][j] != null)
 					arr[i * 8 + j] = feld[i][j].art.ordinal() * (feld[i][j].farbe == Farbe.WEISS ? 1 : -1);
 			}
@@ -392,11 +408,11 @@ public class Brett {
 				num = num ^ 1;
 			}
 		}
-		
+
 		int f = farbe.ordinal();
 
-		for (int i = 7 * f; f==0?i<8:i>-1; i+= 1 + -2*f) {
-			for (int j = 7 * f; f==0?j<8:j>-1; j+= 1 + -2*f) {
+		for (int i = 7 * f; f == 0 ? i < 8 : i > -1; i += 1 + -2 * f) {
+			for (int j = 7 * f; f == 0 ? j < 8 : j > -1; j += 1 + -2 * f) {
 				Figur figur;
 				if ((figur = feld[i][j]) != null) {
 
@@ -425,60 +441,5 @@ public class Brett {
 			System.out.println();
 		}
 
-	}
-
-	public static void main(String[] args) {
-		Brett b = new Brett();
-
-//		for (int i = 0; i < alle_züge.size(); i++) {
-//
-//			int x = alle_züge.get(i).x;
-//			int y = alle_züge.get(i).y;
-//			if (b.feld[y][x] != null)
-//				System.out.println(b.feld[y][x].art.toString() + "    " + b.feld[y][x].farbe.toString());
-//
-//		}
-
-//		JFrame f = new JFrame();
-//		f.setSize(8 * 50, 8 * 60);
-//		f.setVisible(true);
-//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		Graphics g = f.getGraphics();
-//		Player[] net = { new Rando(), new SteckerlFisch("SteckerlFische/fisch8",2) };
-
-		Partie p = new Partie(new OmegaStop(3),new Rando(),false);
-		
-		int win_count = 0;
-		for(int i = 0; i < 10; i++) {
-			int w = p.play(100);
-			if(w == 0) {
-				win_count++;
-			}
-			System.out.println(i);
-		}
-		win_count = win_count;
-		System.out.println("avergae accuracy:  " + win_count);
-
-//		for (int i = 0; i < (int) Double.POSITIVE_INFINITY; i++) {
-//
-//			b.ziehe(net[i % 2].ziehe(b, Farbe.values()[i % 2]));
-//
-//			g.drawImage(b.asBild(), 0, 50, 8 * 50, 8 * 50, null);
-//			try {
-//				if (!b.isSchach(Farbe.values()[Math.abs((i % 2) - 1)])) {
-//					Thread.sleep(0);
-//				} else {
-//					System.out.println("SCHACH!!");
-//					try {
-//						Thread.sleep(0);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
 }

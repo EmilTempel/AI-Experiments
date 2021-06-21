@@ -10,7 +10,6 @@ import Gui.GraphicsObject;
 import Gui.Mensch;
 import spiel.Figur.Farbe;
 import spiel.er.Player;
-import spiel.er.Rando;
 
 public class Partie {
 
@@ -50,10 +49,10 @@ public class Partie {
 		}
 	}
 
-	public int play(int max_züge) {
+	public double play(long max_züge, Brett...b) {
 		verlauf = new ArrayList<Brett>();
 
-		brett = new Brett();
+		brett = b.length == 0 ? new Brett() : b [0];
 
 		int p = Math.random() > 0.5 ? 0 : 1;
 
@@ -65,18 +64,15 @@ public class Partie {
 
 			Spielzug zug = player[(p + i) % 2].ziehe(brett, Farbe.values()[i % 2]);
 
-			if (zug == null) {
-				if (brett.isSchach(Farbe.values()[i % 2])) {
-					return Math.abs(Math.abs((p + i) % 2) - 1);
-				}
-			} else if (brett.isRemis()) {
-				return -1;
-			} else {
+			double erg = brett.isOver(Farbe.values()[i % 2]);
+			if(erg == -1) {
 				brett.ziehe(zug);
+			}else {
+				return erg;
 			}
 			
 		}
-		return -1;
+		return 0.5;
 	}
 
 	public Brett[] getSpiel() {
@@ -88,12 +84,12 @@ public class Partie {
 	}
 
 	public static void main(String[] args) {
-		Partie p = new Partie(new OmegaStop(4,10,1,3,4,2,1),new Mensch(), true);
+		Partie p = new Partie(new Mensch(),new OmegaStop(4), true);
 
 		int score = 0;
 		
 		for (int i = 0; i < 100; i++) {
-			score += p.play(250) == 0? 1 : 0 ;
+			score += p.play(250) == 0? 1 : 0;
 			System.out.println(score);
 		}
 
