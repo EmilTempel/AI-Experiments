@@ -40,7 +40,7 @@ public class Partie {
 
 			for (int i = 0; i < 2; i++) {
 				if (player[i] instanceof Mensch) {
-					player[i] = new Mensch(fenster);
+					player[i] = new Mensch(fenster,player[i].getName());
 					System.out.println("mensch");
 				}
 			}
@@ -55,6 +55,7 @@ public class Partie {
 		brett = b.length == 0 ? new Brett() : b [0];
 
 		int p = Math.random() > 0.5 ? 0 : 1;
+		
 
 		for (int i = 0; i < max_züge; i++) {
 			if (watch)
@@ -62,10 +63,9 @@ public class Partie {
 
 			verlauf.add(new Brett(brett));
 
-			Spielzug zug = player[(p + i) % 2].ziehe(brett, Farbe.values()[i % 2]);
-
-			double erg = brett.isOver(Farbe.values()[i % 2]);
+			double erg = brett.isOver(Farbe.values()[1-p]);
 			if(erg == -1) {
+				Spielzug zug = player[(p + i) % 2].ziehe(brett, Farbe.values()[i % 2]);
 				brett.ziehe(zug);
 			}else {
 				return erg;
@@ -84,15 +84,13 @@ public class Partie {
 	}
 
 	public static void main(String[] args) {
-		Partie p = new Partie(new Mensch(),new OmegaStop(4), true);
+		Partie p = new Partie(new Mensch("P1"),new OmegaStop(4,46796.63829809371, 1482.7546966071022, 11458.265730802192, -7239.829211886708, -7386.140998964242, 8423.572140880713), true);
 
-		int score = 0;
 		
 		for (int i = 0; i < 100; i++) {
-			score += p.play(250) == 0? 1 : 0;
-			System.out.println(score);
+			double score = p.play(250);
+			System.out.println(score != 0.5 ? p.player[(int)score].getName() : "Unentschieden");
 		}
 
-		System.out.println(score);
 	}
 }

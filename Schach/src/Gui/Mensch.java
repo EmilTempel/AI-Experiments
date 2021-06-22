@@ -25,11 +25,11 @@ public class Mensch extends Player implements MouseListener, MouseMotionListener
 
 	ArrayList<Spielzug> züge;
 
-	public Mensch() {
-
+	public Mensch(String name) {
+		setName(name);
 	}
 
-	public Mensch(Fenster fenster) {
+	public Mensch(Fenster fenster, String name) {
 		this.fenster = fenster;
 		fenster.addMouseListener(this);
 		fenster.addMouseMotionListener(this);
@@ -54,6 +54,8 @@ public class Mensch extends Player implements MouseListener, MouseMotionListener
 			}
 
 		});
+		
+		setName(name);
 	}
 
 	public Spielzug ziehe(Brett brett, Farbe farbe) {
@@ -65,9 +67,9 @@ public class Mensch extends Player implements MouseListener, MouseMotionListener
 		synchronized (this) {
 			while (true) {
 				try {
-					System.out.println("waiting...");
+//					System.out.println("waiting...");
 					wait();
-					System.out.println("finished waiting!");
+//					System.out.println("finished waiting!");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -86,14 +88,14 @@ public class Mensch extends Player implements MouseListener, MouseMotionListener
 	public void mousePressed(MouseEvent e) {
 		if (zug == null) {
 			zug = new Spielzug(fenster.convert(e.getX()), fenster.convert(e.getY()));
-			System.out.println("pressed at: " + zug.getX() + "  " + zug.getY());
+//			System.out.println("pressed at: " + zug.getX() + "  " + zug.getY());
 		}
 
 	}
 
 	public void mouseReleased(MouseEvent e) {
 
-		System.out.println("released");
+//		System.out.println("released");
 		if (zug != null) {
 			int x = fenster.convert(e.getX());
 			int y = fenster.convert(e.getY());
@@ -101,7 +103,7 @@ public class Mensch extends Player implements MouseListener, MouseMotionListener
 
 			if (brett != null && brett.isPossible(zug, true)) {
 				synchronized (this) {
-					System.out.println("notify");
+//					System.out.println("notify");
 					notify();
 				}
 			}else {
