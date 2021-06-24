@@ -55,19 +55,20 @@ public class Figur {
 	
 
 	public enum Art {
-		KOENIG(true, 1, 0, new Zug[] { new Zug(-1, 1), new Zug(0, 1) }),
-		DAME(true, 7, 9, new Zug[] { new Zug(-1, 1), new Zug(0, 1) }), TURM(true, 7, 5, new Zug[] { new Zug(0, 1) }),
-		LAEUFER(true, 7, 3, new Zug[] { new Zug(-1, 1) }),
-		SPRINGER(true, 1, 3, new Zug[] { new Zug(-2, 1), new Zug(-1, 2) }),
-		BAUER(false, 1, 1, new Zug[] { new Zug(-1, 1, false), new Zug(0, 1, true), new Zug(1, 1, false) });
+		KOENIG(true, 1, 0, "k",new Zug[] { new Zug(-1, 1), new Zug(0, 1) }),
+		DAME(true, 7, 9, "q", new Zug[] { new Zug(-1, 1), new Zug(0, 1) }), TURM(true, 7, 5, "r", new Zug[] { new Zug(0, 1) }),
+		LAEUFER(true, 7, 3, "b", new Zug[] { new Zug(-1, 1) }),
+		SPRINGER(true, 1, 3, "n", new Zug[] { new Zug(-2, 1), new Zug(-1, 2) }),
+		BAUER(false, 1, 1, "p", new Zug[] { new Zug(-1, 1, false), new Zug(0, 1, true), new Zug(1, 1, false) });
 
 		Zug[] züge;
 		int länge, wert;
+		String code;
 
-		Art(boolean rotation, int länge, int wert, Zug[] Züge_Vor) {
+		Art(boolean rotation, int länge, int wert, String code, Zug[] Züge_Vor) {
 			this.länge = länge;
 			this.wert = wert;
-
+			this.code = code;
 			if (rotation) {
 				züge = new Zug[Züge_Vor.length * 4];
 
@@ -84,6 +85,15 @@ public class Figur {
 				züge = Züge_Vor;
 			}
 
+		}
+		
+		public static Art get(String code){
+			for(Art a : values()){
+				if(a.code.equals(code)){
+					return a;
+				}
+			}
+			return null;
 		}
 	}
 

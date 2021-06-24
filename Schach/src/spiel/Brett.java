@@ -16,7 +16,8 @@ public class Brett {
 	ArrayList<Spielzug>[] alle_züge = (ArrayList<Spielzug>[]) new ArrayList[2];
 
 	public Brett() {
-		feld = standard_Aufstellung();
+		feld = new Figur[8][8];
+		loadFEN("2bqkbn1/2pppp2/np2N3/r3P1p1/p2N2B1/5Q2/PPPPKPP1/RNB2r2");
 	}
 
 	public Brett(Brett b) {
@@ -71,6 +72,30 @@ public class Brett {
 		}
 
 		return feld;
+	}
+	
+	public void loadFEN(String FEN){
+		String[] args = FEN.split(" ");
+		String[] rows = args[0].split("/");
+		
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				char temp = rows[i].charAt(j);
+				if(temp - '0' < 10){
+					j += temp - '0';
+				}else{
+					Art a = Art.get(String.valueOf(temp).toLowerCase());
+					
+					if(a != null){
+						feld[7-i][j] = new Figur(a, Character.isLowerCase(temp) ? Farbe.SCHWARZ: Farbe.WEISS);
+					}
+				}
+				
+				
+				
+			}
+		}
+		
 	}
 
 	public Figur FigurAt(int x, int y) {
