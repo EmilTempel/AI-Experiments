@@ -17,7 +17,7 @@ public class Brett {
 
 	public Brett() {
 		
-		loadFEN("2bqkbn1/2pppp2/np2N3/r3P1p1/p2N2B1/5Q2/PPPPKPP1/RNB2r2");
+		loadFEN("2bqkbn1/2pppp2/np2N3/r3P1p1/p2N2B1/5Q2/PPPPKPP1/RNB2r2 1");
 	}
 
 	public Brett(Brett b) {
@@ -42,8 +42,9 @@ public class Brett {
 		String[] rows = args[0].split("/");
 		
 		for(int i = 0; i < 8; i++){
+			int c= 0;
 			for(int j = 0; j < 8; j++){
-				char temp = rows[i].charAt(j);
+				char temp = rows[i].charAt(c);
 				if(temp - '0' < 10){
 					j += temp - '0';
 				}else{
@@ -52,10 +53,9 @@ public class Brett {
 					if(a != null){
 						feld[7-i][j] = new Figur(a, Character.isLowerCase(temp) ? Farbe.SCHWARZ: Farbe.WEISS);
 					}
+					
 				}
-				
-				
-				
+				c++;
 			}
 		}
 		
