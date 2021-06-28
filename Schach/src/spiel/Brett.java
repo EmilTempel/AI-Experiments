@@ -16,7 +16,7 @@ public class Brett {
 	ArrayList<Spielzug>[] alle_züge = (ArrayList<Spielzug>[]) new ArrayList[2];
 
 	public Brett() {
-		feld = new Figur[8][8];
+		
 		loadFEN("2bqkbn1/2pppp2/np2N3/r3P1p1/p2N2B1/5Q2/PPPPKPP1/RNB2r2");
 	}
 
@@ -34,47 +34,10 @@ public class Brett {
 		}
 
 	}
-
-	public Figur[][] standard_Aufstellung() {
-		Figur[][] feld = new Figur[8][8];
-
-		Art[] aufstellung = { Art.TURM, Art.SPRINGER, Art.LAEUFER, Art.KOENIG, Art.DAME, Art.LAEUFER, Art.SPRINGER,
-				Art.TURM };
-
-		for (int i = 0; i < aufstellung.length; i++) {
-			feld[0][i] = new Figur(aufstellung[i], Farbe.WEISS);
-			feld[1][i] = new Figur(Art.BAUER, Farbe.WEISS);
-
-			feld[7][i] = new Figur(aufstellung[i], Farbe.SCHWARZ);
-			feld[6][i] = new Figur(Art.BAUER, Farbe.SCHWARZ);
-
-		}
-
-		return feld;
-	}
-
-	public Figur[][] rochade_Aufstellung() {
-		Figur[][] feld = new Figur[8][8];
-
-		Art[] aufstellung = { Art.TURM, null, null, Art.KOENIG, null, null, null, Art.TURM };
-
-		for (int i = 0; i < aufstellung.length; i++) {
-			if (aufstellung[i] != null) {
-				feld[0][i] = new Figur(aufstellung[i], Farbe.WEISS);
-			}
-			feld[1][i] = new Figur(Art.BAUER, Farbe.WEISS);
-
-			if (aufstellung[i] != null) {
-				feld[7][i] = new Figur(aufstellung[i], Farbe.SCHWARZ);
-			}
-			feld[6][i] = new Figur(Art.BAUER, Farbe.SCHWARZ);
-
-		}
-
-		return feld;
-	}
 	
 	public void loadFEN(String FEN){
+		feld = new Figur[8][8];
+		
 		String[] args = FEN.split(" ");
 		String[] rows = args[0].split("/");
 		
